@@ -1,4 +1,4 @@
 TRUNCATE 
     canonize_characters,
     canonize_users
-    RESTART IDENTITY CASCASE;
+    RESTART IDENTITY CASCADE;

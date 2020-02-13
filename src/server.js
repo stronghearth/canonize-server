@@ -10,6 +10,6 @@ const db = knex({
 app.set('db', db)
 
 app.listen(PORT, () => {
-  console.log(`Server listening at http://localhost:${PORT}`)
+  console.log(`Canonize server listening at http://localhost:${PORT}`)
   console.log('I\'m gonna give it my all!')
 })

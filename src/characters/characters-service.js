@@ -2,13 +2,12 @@ const xss = require('xss');
 const Treeize = require('treeize');
 
 const CharacterService = {
-    getAllCharacters(db) {
+    getAllCharactersByUser(db, user) {
         return db 
             .from('canonize_characters')
             .select()
+            .where('user_id', user.id)
             .orderBy('date_created', 'desc')
-            .groupBy('id', 'user_id')
-
     },
     getCharacterbyId(db, id) {
         return db

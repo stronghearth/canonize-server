@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const CharactersService = require('./characters-service');
 const { requireAuth } = require('../middleware/jwt-auth');
 const charactersRouter = express.Router();
@@ -34,17 +35,10 @@ charactersRouter
             .then(character => {
                 res
                     .status(201)
+                    .location(path.posix.join(req.originalUrl, `/${character.id}`))
                     .json(CharactersService.serializeCharacter(character))
             })
             .catch(next)
     })
-
-/*charactersRouter
-    .route('/:characterId')
-    .get((req, res, next) => {
-       const knexInstance = req.app.get('db')
-       const { id } = req.params
-       CharactersService.getCharacterbyId(knexInstance, id)
-    })*/
 
 module.exports = charactersRouter;

@@ -20,6 +20,9 @@ const CharacterService = {
                 .insert(newCharacter)
                 .into('canonize_characters')
                 .returning('*')
+                .then(([character]) => character)
+                .then(character => 
+                    CharacterService.getCharacterbyId(db, character.id))
     },
     serializeCharacter(character) {
         return {

@@ -24,6 +24,16 @@ const CharacterService = {
                 .then(character => 
                     CharacterService.getCharacterbyId(db, character.id))
     },
+    updateCharacter(db, id, updateCharacterFields) {
+        return db('canonize_characters')
+                .where({id})
+                .update(updateCharacterFields)
+    },
+    deleteCharacter(db, id) {
+        return db('canonize_characters')
+                .where( 'id', id)
+                .delete()
+    },
     serializeCharacter(character) {
         return {
             id: character.id,

@@ -17,7 +17,7 @@ const morganOption = (NODE_ENV === 'production')
 app.use(morgan(morganOption))
 app.use(helmet())
 app.use(cors({
-    origin: 'https://canonize.now.sh'
+    origin: CLIENT_ORIGIN
 }))
 
 app.use('/api/characters', charactersRouter)

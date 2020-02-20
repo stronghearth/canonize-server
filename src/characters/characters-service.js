@@ -6,7 +6,7 @@ const CharacterService = {
             .from('canonize_characters')
             .select()
             .where('user_id', user.id)
-            .orderBy('date_created', 'desc')
+            .orderBy('canonize_characters.date_created', 'desc')
     },
     getCharacterbyId(db, id) {
         return db
@@ -48,7 +48,7 @@ const CharacterService = {
             art_img: xss(character.art_img),
             date_created: character.date_created,
             date_modified: character.date_modified,
-            user_id: character.user_id
+            user_id: character.user_id,
         }
     }
 }

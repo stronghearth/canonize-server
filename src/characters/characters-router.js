@@ -11,6 +11,7 @@ charactersRouter
     .get((req, res, next) => {
        const knexInstance = req.app.get('db')
        const user = req.user
+       const username = req.user.user_name
         CharactersService.getAllCharactersByUser(knexInstance, user)
             .then(characters => {
                 res.json(characters.map(char => CharactersService.serializeCharacter(char)))
@@ -71,6 +72,8 @@ charactersRouter
         const {id} = req.params;
         
         const characterToUpdate = {character_name, age, gender, strongest_bonds, antagonist, appearance, mannerisms, general_desc, art_img};
+
+        characterToUpdate.date_created = new Date()
 
         const numberOfValues = Object.values(characterToUpdate).filter(Boolean).length
             if(numberOfValues === 0) {

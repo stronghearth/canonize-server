@@ -1,6 +1,7 @@
 const knex = require('knex')
 const app = require('../src/app')
 const helpers = require('./test-helpers');
+const config = require('./../src/config')
 const jwt = require('jsonwebtoken')
 
 describe.only('Auth Endpoints', function() {
@@ -12,16 +13,16 @@ describe.only('Auth Endpoints', function() {
     before('make knex instance', () => {
         db = knex({
             client: 'pg',
-            connection: process.env.TEST_DATABASE_URL
+            connection: process.env.TEST_DB_URL
         })
         app.set('db', db)
     })
 
     after('disconnect from db', () => db.destroy())
 
-    before('cleanup', helpers.cleanTables(db))
+    before('cleanup', () => helpers.cleanTables(db))
     
-    afterEach('cleanup', helpers.cleanTables(db))
+    afterEach('cleanup', () => helpers.cleanTables(db))
 
     describe(`POST /api/auth/login`, () => {
         beforeEach('insert users', () => 
@@ -41,6 +42,7 @@ describe.only('Auth Endpoints', function() {
                 process.env.JWT_SECRET,
                 {
                     subject: testUser.user_name,
+                    expiresIn: process.env.JWT_EXPIRY,
                     algorithm: 'HS256',
                 }
             )

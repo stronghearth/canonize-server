@@ -118,12 +118,21 @@ function seedCharacters(db, users, characters) {
 }
 
 function cleanTables(db) {
-    return db.raw(
+    return db.transaction(trx =>
+      trx.raw (
       `TRUNCATE 
       canonize_characters,
       canonize_users
       RESTART IDENTITY CASCADE`
-    )
+    ))
+    .then(() => {
+      Promise.all([
+        trx.raw(`ALTER SEQUENCE canonize_characters_id_seq minvalue 0 START WITH 1`),
+        trx.raw(`ALTER SEQUENCE canonize_users_id_seq minvalue 0 START WITH 1`),
+        trx.raw(`SELECT setval('canonize_users_id_seq', 0)`),
+        trx.raw(`SELECT setval('canonize_characters_id_seq', 0)`),
+      ])
+    })
   }
 
 function makeFixtures() {

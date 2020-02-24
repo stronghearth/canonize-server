@@ -1,10 +1,9 @@
 const knex = require('knex')
 const app = require('../src/app')
-const helpers = require('./test-helpers');
-const config = require('./../src/config')
+const helpers = require('./test-helpers')
 const jwt = require('jsonwebtoken')
 
-describe.only('Auth Endpoints', function() {
+describe('Auth Endpoints', function() {
     let db
     
     const {testUsers} = helpers.makeFixtures()

@@ -51,7 +51,9 @@ function makeCharactersArray (users) {
             mannerisms: '1',
             general_desc: 'I am test one',
             date_created: '2029-01-22T16:28:32.615Z',
-            user_id: users[0].id
+            art_img: 'https://exampleurl.com',
+            user_id: users[0].id,
+            date_modified: null
         },
         {
             id: 2,
@@ -64,7 +66,9 @@ function makeCharactersArray (users) {
             mannerisms: '2',
             general_desc: 'I am test two',
             date_created: '2029-01-22T16:28:32.615Z',
-            user_id: users[1].id
+            art_img: 'https://exampleurl.com',
+            user_id: users[1].id,
+            date_modified: null
         },
         {
             id: 3,
@@ -77,7 +81,9 @@ function makeCharactersArray (users) {
             mannerisms: '3',
             general_desc: 'I am test three',
             date_created: '2029-01-22T16:28:32.615Z',
-            user_id: users[2].id
+            art_img: 'https://exampleurl.com',
+            user_id: users[2].id,
+            date_modified: null
         },
         {
             id: 4,
@@ -90,7 +96,9 @@ function makeCharactersArray (users) {
             mannerisms: '4',
             general_desc: 'I am test four',
             date_created: '2029-01-22T16:28:32.615Z',
-            user_id: users[3].id
+            art_img: 'https://exampleurl.com',
+            user_id: users[3].id,
+            date_modified: null
         },
     ]
 }
@@ -109,12 +117,8 @@ function seedUsers(db, users) {
               )
 }
 
-function seedCharacters(db, users, characters) {
-    return seedUsers(db, users)
-            .then(() => {
-                db.into(canonize_characters)
-                .insert(characters)
-            })
+function seedCharacters(db, characters) {
+    return db.into('canonize_characters').insert(characters)
 }
 
 function cleanTables(db) {
@@ -136,7 +140,7 @@ function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
            subject: user.user_name,
            algorithm: 'HS256',
          })
-    return `Bearer ${token}`
+    return `bearer ${token}`
   }
 
   module.exports = {

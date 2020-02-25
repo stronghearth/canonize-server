@@ -27,7 +27,7 @@ describe('Characters Endpoints', function () {
     describe(`GET /api/characters`, () => {
         context(`Given no characters are in user account`, () => {
             beforeEach('insert users', () => {
-                helpers.seedUsers(
+                return helpers.seedUsers(
                     db,
                     testUsers
                 )})
@@ -41,7 +41,7 @@ describe('Characters Endpoints', function () {
         })
         context(`Given there are characters in user account`, () => {
             beforeEach('insert characters', () => {
-                helpers.seedUsers(
+                return helpers.seedUsers(
                     db,
                     testUsers
                 )
@@ -60,11 +60,65 @@ describe('Characters Endpoints', function () {
         })
     })
     describe('GET /api/characters/:id', () => {
-        beforeEach('insert users', () => {
-            helpers.seedUsers(
+        beforeEach('insert users and characters', () => {
+            return helpers.seedUsers(
                 db,
                 testUsers
-            )})
-        
+            )
+            .then(() => helpers.seedCharacters(db, testCharacters))
+        })
+        it('returns specified character by id', () => {
+            const testUser = testUsers[2]
+            const id = testCharacters[2].id
+            expectedCharacter = testCharacters[2]
+            return supertest(app)
+                    .get(`/api/characters/${id}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUser))
+                    .expect(200, expectedCharacter)
+        })
+    })
+    describe('POST /api/characters', () => {
+        beforeEach('insert users and characters', () => {
+            return helpers.seedUsers(
+                db,
+                testUsers
+            )
+            .then(() => helpers.seedCharacters(db, testCharacters))
+        })
+        it(`adds new character to designated user, returns 201 and new character `, () => {
+            this.retries(3)
+            const newCharacter = {
+                character_name: 'Joe Schmoe',
+                age: '7',
+                gender: 'he/him',
+                strongest_bonds: 'most animals',
+                antagonist: 'most people',
+                appearance: 'a regular dude',
+                mannerisms: 'slight eye twitch',
+                general_desc: 'Hey I am Joe',
+                art_img: 'https://exampleurl.com'
+            }
+            const testUser = testUsers[0]
+            return supertest(app)
+                        .post('/api/characters')
+                        .set('Authorization', helpers.makeAuthHeader(testUser))
+                        .send(newCharacter)
+                        .expect(201)
+                        .expect(res => {
+                            expect(res.body).to.have.property('id')
+                            expect(res.body.character_name).to.eql(newCharacter.character_name)
+                            expect(res.body.age).to.eql(newCharacter.age)
+                            expect(res.body.gender).to.eql(newCharacter.gender)
+                            expect(res.body.strongest_bonds).to.eql(newCharacter.strongest_bonds)
+                            expect(res.body.antagonist).to.eql(newCharacter.antagonist)
+                            expect(res.body.mannerisms).to.eql(newCharacter.mannerisms)
+                            expect(res.body.art_img).to.eql(newCharacter.art_img)
+                            expect(res.body.user_id).to.eql(testUser.id)
+                            expect(res.headers.location).to.eql(`/api/characters/${res.body.id}`)
+                            const expectedDate = new Date().toLocaleString()
+                            const actualDate = new Date(res.body.date_created).toLocaleString()
+                            expect(actualDate).to.eql(expectedDate)
+                        })
+        })
     })
 })

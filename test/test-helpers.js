@@ -165,7 +165,8 @@ function cleanTables(db) {
 function makeFixtures() {
     const testUsers = makeUsersArray()
     const testCharacters = makeCharactersArray(testUsers)
-    return {testUsers, testCharacters}
+    const testRelationships = makeRelationshipsArray(testCharacters)
+    return {testUsers, testCharacters, testRelationships}
 }
 function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
     const token = jwt.sign({ user_id: user.id }, secret, {

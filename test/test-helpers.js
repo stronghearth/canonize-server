@@ -103,6 +103,33 @@ function makeCharactersArray (users) {
     ]
 }
 
+function makeRelationshipsArray (characters) {
+   return [
+     {
+        id: 1,
+        character_one: characters[0].id,
+        character_two: characters[1].id,
+        relationship_desc: "i am a relationship",
+        antagonistic: 5,
+        friendly: 0,
+        mentor_mentee: 0,
+        business: 6,
+        romantic: 0
+     },
+     {
+        id: 2,
+        character_one: characters[2].id,
+        character_two: characters[3].id,
+        relationship_desc: "i am another relationship",
+        antagonistic: 0,
+        friendly: 5,
+        mentor_mentee: 9,
+        business: 4,
+        romantic: 0
+     }
+   ]
+}
+
 function seedUsers(db, users) {
     const preppedUsers = users.map(user => ({
       ...user,
@@ -121,11 +148,16 @@ function seedCharacters(db, characters) {
     return db.into('canonize_characters').insert(characters)
 }
 
+function seedRelationships(db, relationships) {
+    return db.into('canonize_relationships').insert(relationships)
+}
+
 function cleanTables(db) {
     return db.raw(
       `TRUNCATE 
       canonize_characters,
-      canonize_users
+      canonize_users,
+      canonize_relationships,
       RESTART IDENTITY CASCADE`
     )
   }
@@ -146,9 +178,11 @@ function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
   module.exports = {
       makeUsersArray,
       makeCharactersArray,
+      makeRelationshipsArray,
       makeAuthHeader,
       makeFixtures,
       cleanTables,
       seedCharacters,
-      seedUsers
+      seedUsers,
+      seedRelationships
   }

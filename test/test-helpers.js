@@ -67,7 +67,7 @@ function makeCharactersArray (users) {
             general_desc: 'I am test two',
             date_created: '2029-01-22T16:28:32.615Z',
             art_img: 'https://exampleurl.com',
-            user_id: users[0].id,
+            user_id: users[1].id,
             date_modified: null
         },
         {
@@ -82,7 +82,7 @@ function makeCharactersArray (users) {
             general_desc: 'I am test three',
             date_created: '2029-01-22T16:28:32.615Z',
             art_img: 'https://exampleurl.com',
-            user_id: users[1].id,
+            user_id: users[2].id,
             date_modified: null
         },
         {
@@ -97,7 +97,7 @@ function makeCharactersArray (users) {
             general_desc: 'I am test four',
             date_created: '2029-01-22T16:28:32.615Z',
             art_img: 'https://exampleurl.com',
-            user_id: users[1].id,
+            user_id: users[3].id,
             date_modified: null
         },
     ]
@@ -158,9 +158,9 @@ function cleanTables(db) {
     return db.raw(
       `TRUNCATE 
       canonize_characters,
-      canonize_relationships
-      canonize_users,
-      RESTART IDENTITY CASCADE;`
+      canonize_relationships,
+      canonize_users
+      RESTART IDENTITY CASCADE`
     )
   }
 

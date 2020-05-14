@@ -77,7 +77,7 @@ describe('Characters Endpoints', function () {
                     .expect(200, expectedCharacter)
         })
     })
-    describe.only('POST /api/characters', () => {
+    describe('POST /api/characters', () => {
         beforeEach('insert users and characters', () => {
             return helpers.seedUsers(
                 db,

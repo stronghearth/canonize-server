@@ -11,3 +11,8 @@ ALTER TABLE canonize_characters
     ADD COLUMN 
     user_id INTEGER REFERENCES canonize_users(id)
     ON DELETE SET NULL;
+
+ALTER TABLE canonize_relationships
+    ADD COLUMN
+    id_user INTEGER REFERENCES canonize_users(id)
+    ON DELETE SET NULL;

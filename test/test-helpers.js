@@ -67,7 +67,7 @@ function makeCharactersArray (users) {
             general_desc: 'I am test two',
             date_created: '2029-01-22T16:28:32.615Z',
             art_img: 'https://exampleurl.com',
-            user_id: users[1].id,
+            user_id: users[0].id,
             date_modified: null
         },
         {
@@ -82,7 +82,7 @@ function makeCharactersArray (users) {
             general_desc: 'I am test three',
             date_created: '2029-01-22T16:28:32.615Z',
             art_img: 'https://exampleurl.com',
-            user_id: users[2].id,
+            user_id: users[1].id,
             date_modified: null
         },
         {
@@ -97,13 +97,13 @@ function makeCharactersArray (users) {
             general_desc: 'I am test four',
             date_created: '2029-01-22T16:28:32.615Z',
             art_img: 'https://exampleurl.com',
-            user_id: users[3].id,
+            user_id: users[1].id,
             date_modified: null
         },
     ]
 }
 
-function makeRelationshipsArray (characters) {
+function makeRelationshipsArray (characters, users) {
    return [
      {
         id: 1,
@@ -114,7 +114,8 @@ function makeRelationshipsArray (characters) {
         friendly: 0,
         mentor_mentee: 0,
         business: 6,
-        romantic: 0
+        romantic: 0,
+        id_user: users[0].id
      },
      {
         id: 2,
@@ -125,7 +126,8 @@ function makeRelationshipsArray (characters) {
         friendly: 5,
         mentor_mentee: 9,
         business: 4,
-        romantic: 0
+        romantic: 0,
+        id_user: users[1].id
      }
    ]
 }
@@ -156,16 +158,16 @@ function cleanTables(db) {
     return db.raw(
       `TRUNCATE 
       canonize_characters,
+      canonize_relationships
       canonize_users,
-      canonize_relationships,
-      RESTART IDENTITY CASCADE`
+      RESTART IDENTITY CASCADE;`
     )
   }
 
 function makeFixtures() {
     const testUsers = makeUsersArray()
     const testCharacters = makeCharactersArray(testUsers)
-    const testRelationships = makeRelationshipsArray(testCharacters)
+    const testRelationships = makeRelationshipsArray(testCharacters, testUsers)
     return {testUsers, testCharacters, testRelationships}
 }
 function makeAuthHeader(user, secret = process.env.JWT_SECRET) {

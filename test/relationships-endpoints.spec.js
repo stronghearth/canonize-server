@@ -23,7 +23,7 @@ describe('Relationship Endpoints', function () {
 
     before('cleanup', () => helpers.cleanTables(db))
 
-    afterEach('cleanup', helpers.cleanTables(db))
+    afterEach('cleanup', () => helpers.cleanTables(db))
 
     describe(`GET /api/relationships`, () => {
         context('given there are no relationships in user account', () => {

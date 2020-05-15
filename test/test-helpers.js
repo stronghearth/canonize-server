@@ -156,10 +156,10 @@ function seedRelationships(db, relationships) {
 
 function cleanTables(db) {
     return db.raw(
-      `TRUNCATE 
-      canonize_characters,
+      `TRUNCATE
+      canonize_users,
       canonize_relationships,
-      canonize_users
+      canonize_characters
       RESTART IDENTITY CASCADE`
     )
   }
@@ -171,7 +171,7 @@ function makeFixtures() {
     return {testUsers, testCharacters, testRelationships}
 }
 function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
-    const token = jwt.sign({ user_id: user.id }, secret, {
+    const token = jwt.sign({ user_id: user.id, full_name: user.full_name }, secret, {
            subject: user.user_name,
            algorithm: 'HS256',
          })

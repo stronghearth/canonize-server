@@ -1,6 +1,7 @@
 BEGIN;
 
 TRUNCATE
+    canonize_relationships,
     canonize_characters,
     canonize_users
     RESTART IDENTITY CASCADE;
@@ -17,5 +18,9 @@ VALUES
     ('Ellandra Berevan', '109', 'They/Them', 'Their mysterious patron', 'Argan Berevan', 'blonde, curly hair, 6ft tall, pointy ears, always sleepy eyes', 'obsessively writes down all their dreams in a notebook', 'an elf with a dark secret', 'https://i.pinimg.com/564x/7a/19/03/7a1903e84d0dad7bae11291a5730d596.jpg', '2019-01-08T16:28:32.615Z', 1),
     ('Feather in the Wind of the Twisting Forest Clan', '25', 'She/Her', 'Her mission to solve the mystery surrounding the obliteration of her tribe', 'Colonizers', 'Brown-orange fur, tall, slender, blue cat eyes', 'Ditzy in social situations, competent in battle', 'A tabaxi fighter on a mission', 'https://i.pinimg.com/564x/54/55/8c/54558c0498dbbfb3b5cd67afcf35daba.jpg', '2019-01-31T16:28:32.615Z', 1),
     ('Olivia', '30', 'She/her', 'Her music and guildmates', 'Those who seek to disrupt the good in life', 'Blonde curly hair, wears armor modified with danceable flair', 'Enthusiastically tries to motivate others whether they want the support or not', 'A bard who tries to find the right words to say and observe the humanities', 'https://i.pinimg.com/564x/65/ce/e8/65cee8fed28873e5332df0df37469c28.jpg','2019-01-01T16:28:32.615Z', 1);
+
+INSERT INTO canonize_relationships (character_one, character_two, relationship_desc, antagonistic, friendly, id_user)
+VALUES
+    (2, 5, 'Rivals in business technically, but do not know each other very well', 2, 1, 1 );
 
 COMMIT;

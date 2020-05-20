@@ -115,7 +115,8 @@ function makeRelationshipsArray (characters, users) {
         mentor_mentee: 0,
         business: 6,
         romantic: 0,
-        id_user: users[0].id
+        id_user: users[0].id,
+        created_date: "2020-05-20T18:04:58.585Z"
      },
      {
         id: 2,
@@ -127,7 +128,8 @@ function makeRelationshipsArray (characters, users) {
         mentor_mentee: 9,
         business: 4,
         romantic: 0,
-        id_user: users[1].id
+        id_user: users[1].id,
+        created_date: "2020-05-20T18:04:58.585Z"
      }
    ]
 }

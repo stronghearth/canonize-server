@@ -75,4 +75,48 @@ describe.only('Relationship Endpoints', function () {
             })
         })
     })
+    describe('POST /api/relationships', () => {
+        beforeEach('insert users and characters', () => {
+            return helpers.seedUsers(
+                db,
+                testUsers
+            )
+            .then(() => helpers.seedCharacters(db, testCharacters))
+        })
+        it('adds new relationship to designated user, returns 200 and new relationship', () => {
+            this.retries(3)
+            const newRelationship = {
+                character_one: testCharacters[0].id,
+                character_two: testCharacters[3].id,
+                relationship_desc: 'i am a new relationship',
+                antagonistic: 0,
+                friendly: 6,
+                mentor_mentee: 10,
+                business: 10,
+                romantic: 0,
+            }
+            const testUser = testUsers[0]
+            return supertest(app)
+                    .post('/api/relationships')
+                    .set('Authorization', helpers.makeAuthHeader(testUser))
+                    .send(newRelationship)
+                    .expect(201)
+                    .expect(res => {
+                        expect(res.body).to.have.property('id')
+                        expect(res.body.character_one).to.eql(newRelationship.character_one)
+                        expect(res.body.character_two).to.eql(newRelationship.character_two)
+                        expect(res.body.relationship_desc).to.eql(newRelationship.relationship_desc)
+                        expect(res.body.antagonistic).to.eql(newRelationship.antagonistic)
+                        expect(res.body.friendly).to.eql(newRelationship.friendly)
+                        expect(res.body.mentor_mentee).to.eql(newRelationship.mentor_mentee)
+                        expect(res.body.business).to.eql(newRelationship.business)
+                        expect(res.body.romantic).to.eql(newRelationship.romantic)
+                        expect(res.body.id_user).to.eql(testUser.id)
+                        expect(res.headers.location).to.eql(`/api/relationships/${res.body.id}`)
+                        const expectedDate = new Date().toLocaleString()
+                        const actualDate = new Date(res.body.created_date).toLocaleString()
+                        expect(actualDate).to.eql(expectedDate)
+                    })
+        })
+    })
 })

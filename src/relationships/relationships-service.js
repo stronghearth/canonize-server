@@ -10,7 +10,22 @@ const RelationshipService = {
                 .where('id_user', id)
                 .orderBy('canonize_relationships.created_date', 'desc')
     },
-
+    getRelationshipById(db, id) {
+        return db
+                .from('canonize_relationships')
+                .select()
+                .where('id', id)
+                .first()
+    },
+    insertRelationship(db, newRelationship) {
+        return db
+                .insert(newRelationship)
+                .into('canonize_relationships')
+                .returning('*')
+                .then(([relationship]) => relationship)
+                .then(relationship =>
+                    RelationshipService.getRelationshipById(db, relationship.id))
+    }
 }
 
 module.exports = RelationshipService

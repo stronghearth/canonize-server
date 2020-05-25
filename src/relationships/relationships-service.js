@@ -12,10 +12,11 @@ const RelationshipService = {
     },
     getRelationshipById(db, id) {
         return db
-                .from('canonize_relationships')
-                .select()
-                .where('id', id)
-                .first()
+                .select('cr.id' , 'cr.antagonistic', 'cr.friendly', 'cr.business', 'cr.relationship_desc', 'cr.mentor_mentee', 'cr.romantic', 'cr.created_date', 'cr.id_user', 'c1.character_name AS character_one', 'c2.character_name AS character_two')
+                .from('canonize_relationships AS cr')
+                .join('canonize_characters AS c1', 'cr.character_one', 'c1.id')
+                .join('canonize_characters AS c2', 'cr.character_two', 'c2.id')
+                .where('cr.id', id)
     },
     insertRelationship(db, newRelationship) {
         return db

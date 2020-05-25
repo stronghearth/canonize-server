@@ -132,7 +132,19 @@ describe.only('Relationship Endpoints', function () {
         it('retrieves one specific relationship depending on the id provided', () => {
             const testUser = testUsers[0]
             const testRelationshipId = testRelationships[0].id
-            const expectedRelationship = testRelationships[0]
+            const expectedCharacterOneName = testCharacters[0].character_name
+            const expectedCharacterTwoName = testCharacters[1].character_name
+            const expectedRelationship = [{id: testRelationships[0].id,
+                character_one: expectedCharacterOneName,
+                character_two: expectedCharacterTwoName,
+                relationship_desc: testRelationships[0].relationship_desc,
+                antagonistic: testRelationships[0].antagonistic,
+                friendly: testRelationships[0].friendly,
+                mentor_mentee: testRelationships[0].mentor_mentee,
+                business: testRelationships[0].business,
+                romantic: testRelationships[0].romantic,
+                id_user: testRelationships[0].id_user,
+                created_date: testRelationships[0].created_date}]
             return supertest(app)
                         .get(`/api/relationships/${testRelationshipId}`)
                         .set('Authorization', helpers.makeAuthHeader(testUser))

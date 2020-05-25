@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const RelationshipsService = require('./relationships-service');
+const CharacterService = require('../characters/characters-service');
 const { requireAuth } = require('../middleware/jwt-auth');
 const relationshipsRouter = express.Router();
 const jsonParser = express.json();
@@ -29,7 +30,7 @@ relationshipsRouter
                 return res.status(400).send(`'${field}' is required`)
             }
         }
-
+        
         newRelationship.id_user = user.id
 
         RelationshipsService.insertRelationship(knexInstance, newRelationship)
@@ -41,6 +42,31 @@ relationshipsRouter
             })
             .catch(next)
     })
+
+    relationshipsRouter
+        .route('/:id')
+        .all(requireAuth)
+        .all((req, res, next) => {
+            const knexInstance = req.app.get('db')
+            const { id } = req.params
+
+            RelationshipsService.getRelationshipById(knexInstance, id)
+                .then(relationship => {
+                    if(!relationship) {
+                        return res  
+                                .status(404)
+                                .json({
+                                    error: {message: 'Relationship not found'}
+                                })
+                    }
+                    res.relationship = relationship
+                    next()
+                })
+                .catch(next)
+        })
+        .get((req, res) => {
+            res.json(res.relationship)
+        })
 
 
 module.exports = relationshipsRouter

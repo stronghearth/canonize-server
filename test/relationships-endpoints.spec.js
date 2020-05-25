@@ -119,4 +119,25 @@ describe.only('Relationship Endpoints', function () {
                     })
         })
     })
+    describe(`GET /api/relationships/:id`, () => {
+        beforeEach('insert users, characters, and relationships', () => {
+            return helpers.seedUsers(
+                db,
+                testUsers
+            )
+            .then(() => helpers.seedCharacters(db, testCharacters))
+            .then(() => helpers.seedRelationships(db, testRelationships))
+        })
+
+        it('retrieves one specific relationship depending on the id provided', () => {
+            const testUser = testUsers[0]
+            const testRelationshipId = testRelationships[0].id
+            const expectedRelationship = testRelationships[0]
+            return supertest(app)
+                        .get(`/api/relationships/${testRelationshipId}`)
+                        .set('Authorization', helpers.makeAuthHeader(testUser))
+                        .expect(200, expectedRelationship)
+
+        })
+    })
 })

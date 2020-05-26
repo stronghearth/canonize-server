@@ -1,7 +1,6 @@
 const express = require('express');
 const path = require('path');
-const RelationshipsService = require('./relationships-service');
-const CharacterService = require('../characters/characters-service');
+const RelationshipService = require('./relationships-service');
 const { requireAuth } = require('../middleware/jwt-auth');
 const relationshipsRouter = express.Router();
 const jsonParser = express.json();
@@ -13,9 +12,9 @@ relationshipsRouter
         const knexInstance = req.app.get('db')
         const user = req.user
 
-        RelationshipsService.getRelationshipsByUser(knexInstance, user.id)
-            .then(relationships => {
-                res.json(relationships)
+        RelationshipService.getRelationshipsByUser(knexInstance, user.id)
+            .then(rels => {
+                res.json(rels.map(rel => RelationshipService.serializeRelationship(rel)))
             })
             .catch(next)
     })
@@ -33,12 +32,12 @@ relationshipsRouter
         
         newRelationship.id_user = user.id
 
-        RelationshipsService.insertRelationship(knexInstance, newRelationship)
-            .then(relationship => {
+        RelationshipService.insertRelationship(knexInstance, newRelationship)
+            .then(rel => {
                 res
                     .status(201)
-                    .location(path.posix.join(req.originalUrl, `/${relationship.id}`))
-                    .json(relationship)
+                    .location(path.posix.join(req.originalUrl, `/${rel.id}`))
+                    .json(rel)
             })
             .catch(next)
     })
@@ -50,22 +49,22 @@ relationshipsRouter
             const knexInstance = req.app.get('db')
             const { id } = req.params
 
-            RelationshipsService.getRelationshipById(knexInstance, id)
-                .then(relationship => {
-                    if(!relationship) {
+            RelationshipService.getRelationshipById(knexInstance, id)
+                .then(rel => {
+                    if(!rel) {
                         return res  
                                 .status(404)
                                 .json({
                                     error: {message: 'Relationship not found'}
                                 })
                     }
-                    res.relationship = relationship
+                    res.relationship = rel
                     next()
                 })
                 .catch(next)
         })
         .get((req, res) => {
-            res.json(res.relationship)
+            res.json(RelationshipService.serializeRelationship(res.relationship))
         })
 
 

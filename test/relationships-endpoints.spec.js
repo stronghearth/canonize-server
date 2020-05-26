@@ -134,7 +134,7 @@ describe.only('Relationship Endpoints', function () {
             const testRelationshipId = testRelationships[0].id
             const expectedCharacterOneName = testCharacters[0].character_name
             const expectedCharacterTwoName = testCharacters[1].character_name
-            const expectedRelationship = [{id: testRelationships[0].id,
+            const expectedRelationship = {id: testRelationships[0].id,
                 character_one: expectedCharacterOneName,
                 character_two: expectedCharacterTwoName,
                 relationship_desc: testRelationships[0].relationship_desc,
@@ -144,7 +144,7 @@ describe.only('Relationship Endpoints', function () {
                 business: testRelationships[0].business,
                 romantic: testRelationships[0].romantic,
                 id_user: testRelationships[0].id_user,
-                created_date: testRelationships[0].created_date}]
+                created_date: testRelationships[0].created_date}
             return supertest(app)
                         .get(`/api/relationships/${testRelationshipId}`)
                         .set('Authorization', helpers.makeAuthHeader(testUser))

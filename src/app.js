@@ -36,7 +36,7 @@ app.use('/', (req, res) => {
         response = {error: {messge: 'server error'}}
     }
     else {
-        respone = {messge: error.message, error}
+        response = {message: error.message, error}
     }
     res.status(500).json(response)
 })

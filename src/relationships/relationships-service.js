@@ -26,6 +26,21 @@ const RelationshipService = {
                 .then(([relationship]) => relationship)
                 .then(relationship =>
                     RelationshipService.getRelationshipById(db, relationship.id))
+    },
+    serializeRelationship(rel) {
+        return {
+            id: rel.id,
+            character_one: rel.character_one,
+            character_two: rel.character_two,
+            relationship_desc: xss(rel.relationship_desc),
+            antagonistic: rel.antagonistic,
+            friendly: rel.friendly,
+            mentor_mentee: rel.mentor_mentee,
+            business: rel.business,
+            romantic: rel.romantic,
+            id_user: rel.id_user,
+            created_date: rel.created_date
+        }
     }
 }
 

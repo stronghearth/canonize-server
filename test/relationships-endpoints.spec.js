@@ -2,7 +2,7 @@ const knex = require('knex')
 const app = require('../src/app')
 const helpers = require('./test-helpers')
 
-describe.only('Relationship Endpoints', function () {
+describe('Relationship Endpoints', function () {
     let db
 
     const {
@@ -83,7 +83,7 @@ describe.only('Relationship Endpoints', function () {
             )
             .then(() => helpers.seedCharacters(db, testCharacters))
         })
-        it('adds new relationship to designated user, returns 200 and new relationship', () => {
+        it('adds new relationship to designated user, returns 201 and new relationship', () => {
             this.retries(3)
             const newRelationship = {
                 character_one: testCharacters[0].id,
@@ -95,6 +95,8 @@ describe.only('Relationship Endpoints', function () {
                 business: 10,
                 romantic: 0,
             }
+            const expectedCharacterOneName = testCharacters[0].character_name
+            const expectedCharacterTwoName = testCharacters[3].character_name
             const testUser = testUsers[0]
             return supertest(app)
                     .post('/api/relationships')
@@ -103,8 +105,8 @@ describe.only('Relationship Endpoints', function () {
                     .expect(201)
                     .expect(res => {
                         expect(res.body).to.have.property('id')
-                        expect(res.body.character_one).to.eql(newRelationship.character_one)
-                        expect(res.body.character_two).to.eql(newRelationship.character_two)
+                        expect(res.body.character_one).to.eql(expectedCharacterOneName)
+                        expect(res.body.character_two).to.eql(expectedCharacterTwoName)
                         expect(res.body.relationship_desc).to.eql(newRelationship.relationship_desc)
                         expect(res.body.antagonistic).to.eql(newRelationship.antagonistic)
                         expect(res.body.friendly).to.eql(newRelationship.friendly)

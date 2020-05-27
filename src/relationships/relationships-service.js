@@ -17,6 +17,7 @@ const RelationshipService = {
                 .join('canonize_characters AS c1', 'cr.character_one', 'c1.id')
                 .join('canonize_characters AS c2', 'cr.character_two', 'c2.id')
                 .where('cr.id', id)
+                .first()
     },
     insertRelationship(db, newRelationship) {
         return db
@@ -30,8 +31,8 @@ const RelationshipService = {
     serializeRelationship(rel) {
         return {
             id: rel.id,
-            character_one: rel.character_one,
-            character_two: rel.character_two,
+            character_one: xss(rel.character_one),
+            character_two: xss(rel.character_two),
             relationship_desc: xss(rel.relationship_desc),
             antagonistic: rel.antagonistic,
             friendly: rel.friendly,

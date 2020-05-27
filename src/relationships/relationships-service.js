@@ -28,6 +28,11 @@ const RelationshipService = {
                 .then(relationship =>
                     RelationshipService.getRelationshipById(db, relationship.id))
     },
+    updateRelationship(db, id, updateRelationshipFields) {
+        return db('canonize_relationships')
+                    .where('id', id)
+                    .update(updateRelationshipFields)
+    },
     serializeRelationship(rel) {
         return {
             id: rel.id,

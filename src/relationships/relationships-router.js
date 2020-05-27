@@ -66,6 +66,34 @@ relationshipsRouter
         .get((req, res) => {
             res.json(RelationshipService.serializeRelationship(res.relationship))
         })
+        .patch(jsonParser, (req, res, next) => {
+            const knexInstance= req.app.get('db')
+            const {relationship_desc, antagonistic, friendly, mentor_mentee, business, romantic} = req.body
+            const {id} = req.params
 
+            const relationshipToUpdate= {relationship_desc, antagonistic, friendly, mentor_mentee, business, romantic}
+
+            const numberOfValues = Object.values(relationshipToUpdate).filter(Boolean).length
+                if(numberOfValues === 0) {
+                    return res.status(400).json({
+                        error: {
+                            message: `Request must include realtionship_desc, antagonistic, friendly, mentor_mentee, business, or romantic`
+                        }
+                    })
+                }
+
+            RelationshipService.updateRelationship(
+                knexInstance,
+                id,
+                relationshipToUpdate
+            )
+            .then(relAffected => {
+                return res
+                        .status(204)
+                        .json(RelationshipService.serializeRelationship(relAffected))
+                        .end()
+            })
+            .catch(next)
+        })
 
 module.exports = relationshipsRouter

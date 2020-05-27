@@ -154,4 +154,45 @@ describe('Relationship Endpoints', function () {
 
         })
     })
+    describe(`PATCH /api/relationships/:id`, () => {
+        beforeEach('insert users, characters, and relationships', () => {
+            return helpers.seedUsers(
+                db,
+                testUsers
+            )
+            .then(() => helpers.seedCharacters(db, testCharacters))
+            .then(() => helpers.seedRelationships(db, testRelationships))
+        })
+        it('responds with a 204 and updates relationship', () => {
+            const testRelationship = testRelationships[0]
+            const testUser = testUsers[0]
+            const updatedRelationship = {
+                antagonistic: 7,
+                friendly: 1
+            }
+            const expectedCharacterOneName = testCharacters[0].character_name
+            const expectedCharacterTwoName = testCharacters[1].character_name
+            const expectedResult = {
+                id: testRelationship.id,
+                character_one: expectedCharacterOneName,
+                character_two: expectedCharacterTwoName,
+                relationship_desc: testRelationship.relationship_desc,
+                antagonistic: updatedRelationship.antagonistic,
+                friendly: updatedRelationship.friendly,
+                mentor_mentee: testRelationship.mentor_mentee,
+                business: testRelationship.business,
+                romantic: testRelationship.romantic,
+            }
+            return supertest(app)
+                    .patch(`/api/relationships/${testRelationship.id}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUser))
+                    .send(updatedRelationship)
+                    .expect(204)
+                    .then(res => {
+                        supertest(app)
+                            .get(`/api/relationships/${testRelationship.id}`)
+                            .expect(expectedResult)
+                    })
+        })
+    })
 })

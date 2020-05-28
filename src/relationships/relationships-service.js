@@ -33,6 +33,11 @@ const RelationshipService = {
                     .where('id', id)
                     .update(updateRelationshipFields)
     },
+    deleteRelationship(db, id) {
+        return db('canonize_relationships')
+                .where('id', id)
+                .delete()
+    },
     serializeRelationship(rel) {
         return {
             id: rel.id,

@@ -195,4 +195,24 @@ describe('Relationship Endpoints', function () {
                     })
         })
     })
+    describe('DELETE /api/relationships/:id', () => {
+        beforeEach('insert users, characters, and relationships', () => {
+            return helpers.seedUsers(
+                db,
+                testUsers
+            )
+            .then(() => helpers.seedCharacters(db, testCharacters))
+            .then(() => helpers.seedRelationships(db, testRelationships))
+        })
+        it('responds with a 204 when successfully deleted', () => {
+            const testRelationshipId = testRelationships[0].id
+            const testUser = testUsers[0]
+
+            return supertest(app)
+                    .delete(`/api/relationships/${testRelationshipId}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUser))
+                    .expect(204)
+
+        })
+    })
 })

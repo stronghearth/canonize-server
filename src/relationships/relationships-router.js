@@ -95,5 +95,15 @@ relationshipsRouter
             })
             .catch(next)
         })
+        .delete((req, res, next) => {
+            const knexInstance = req.app.get('db')
+            const {id} = req.params
+
+            RelationshipService.deleteRelationship(knexInstance, id)
+                .then(relAffected => {
+                    res.status(204).end()
+                })
+                .catch(next)
+        })
 
 module.exports = relationshipsRouter
